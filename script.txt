@@ -1,0 +1,22 @@
+# The Tune title
+## A super cool subtitle
+Author: The Author // the composer's name
+Copyright: Relevant Copyright
+
+// this is a line comment
+
+- [INTRO]x2 "Drums play 8 bars".
+
+- [A]x2 Play in a certain way.
+
+4/4 [: (Tacet first) Dm | (1.) Dm  A7 :](2.) Dm D7 |
+| G | % | % | A7 Dm |
+
+%vspace%
+
+- [B]x2 Play in a certain way.
+
+| Gm | (Break!) Dm - - - | === |
+| (solo trumpet) -7- .l | A7 Dm |
+
+- [A]x2 -> [B]x2 -> [CODA]
