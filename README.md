@@ -85,7 +85,7 @@ Sections may contain:
 
 ### bars
 Bars start with one of
-* `|` norlam
+* `|` normal
 * `[` double open
 * `]`double close
 * A bar can be preceded by a tempo sign e.g. `3/4`
