@@ -541,7 +541,6 @@ class ThreadedServer(threading.Thread):
                 super().__init__()
             except OSError:
                 self.port += 1
-                raise
 
     def run(self):
         log("Server running.\n" \
