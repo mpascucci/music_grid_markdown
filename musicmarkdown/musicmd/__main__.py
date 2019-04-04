@@ -1,6 +1,7 @@
 import argparse
 from .__init__ import Watcher, ThreadedServer, compile_mmd
 import logging
+import os
 
 if __name__ == "__main__":
     logging.getLogger('musicmd.__init__').setLevel(logging.CRITICAL)
@@ -20,6 +21,10 @@ if __name__ == "__main__":
     n = parser.parse_args()
     # watch.parse_args()
     # print(n)
+
+    if not os.path.exists(n.file):
+        print(f"ERROR: file {n.file} not found in the current directory")
+        exit(1)
 
     if n.command == "serve":
         w = Watcher(n.file)

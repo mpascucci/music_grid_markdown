@@ -41,7 +41,6 @@ class Grid:
     }
 
     def to_html(self, live_server_addr=None):
-        print("live:", live_server_addr)
         if live_server_addr is not None:
             # meta_refresh = '<meta http-equiv="refresh" content="1">'
             script_refresh = resource_string('musicmd', 'resources/musicgrid.js').decode()
@@ -513,8 +512,10 @@ class CustomHandler(SimpleHTTPRequestHandler):
 
     watcher = None
 
+    def log_message(self, format, *args):
+        return
+
     def do_GET(self):
-        print(self.path)
         if self.path == "/is_changed/":
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
@@ -586,6 +587,5 @@ class Watcher(threading.Thread):
                 mtime = os.stat(self.filename).st_mtime
                 compile_mmd(self.filename, live_server_addr=self.live_server_addr)
                 self.is_changed = True
-                print("changed", self.is_changed)
-            sleep(0.1)
+            sleep(0.2)
 
