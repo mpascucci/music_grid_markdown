@@ -23,16 +23,17 @@ if __name__ == "__main__":
 
     if n.command == "serve":
         w = Watcher(n.file)
-        t = ThreadedServer(port=8000)
-        w.start()
+        t = ThreadedServer(w, port=8000)
         t.start()
+        w.live_server_addr = f'http://localhost:{t.port}'
+        w.start()
         print(f"Server running.\nOpen this address (http://localhost:{t.port}) in a web browser to see your grid")
         try:
             while True:
                 input("Kill the process to stop (Ctrl+C)")
         except KeyboardInterrupt:
             t.stop_server() # stop the server
-            w.stop = True # kill the watcher
+            w.stop = True  # kill the watcher
     elif n.command == "watch":
         w = Watcher(n.file)
         w.start()

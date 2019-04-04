@@ -1,5 +1,6 @@
+import json
 import re
-from http.server import HTTPServer, SimpleHTTPRequestHandler, BaseHTTPRequestHandler
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 import threading
 from time import sleep
 import os
@@ -27,7 +28,6 @@ class Grid:
         return sec.format(t=text)
 
     html = {
-        "tail": '</div>\n</body>\n</html>',
         "title": "<h1>{t}</h1>",
         "subtitle": "<h2>{t}</h2>",
         "author": '<p class="author">{t}</p>',
@@ -40,11 +40,17 @@ class Grid:
         "copyright": None
     }
 
-    def to_html(self, autorefresh=False):
-        if autorefresh:
-            meta_refresh = '<meta http-equiv="refresh" content="1">'
+    def to_html(self, live_server_addr=None):
+        print("live:", live_server_addr)
+        if live_server_addr is not None:
+            # meta_refresh = '<meta http-equiv="refresh" content="1">'
+            script_refresh = resource_string('musicmd', 'resources/musicgrid.js').decode()
+            jscript = '<script type = "text/javascript" >\n' \
+                           f'var server_address = "{live_server_addr}"\n' \
+                           f'{script_refresh}\n</script>\n'
         else:
-            meta_refresh = ''
+            jscript = ''
+
 
         css = resource_string('musicmd', 'resources/musicgrid.css').decode()
 
@@ -52,13 +58,15 @@ class Grid:
                             '<html lang="en" dir="ltr">\n'\
                             '<head>\n' \
                             '<meta charset="utf-8">' \
-                            f'{meta_refresh}' \
                             '<style>' \
                             f'{css}' \
                             '</style>' \
                             '</head>' \
                             '<body>' \
                             '<div class="page">'
+
+        self.html["tail"] = f'</div>\n{jscript}\n</body>\n</html>'
+
         tag = self.html
         out_html = [tag["head"], '<div class="header">']
         # header
@@ -499,20 +507,33 @@ class GridProcessor:
         return g
 
 
-class SilentRequestHandler(SimpleHTTPRequestHandler):
+class CustomHandler(SimpleHTTPRequestHandler):
     # disable logging
     # override the logging method of the handler
-    def log_message(self, format, *args):
-        return
+
+    watcher = None
+
+    def do_GET(self):
+        print(self.path)
+        if self.path == "/is_changed/":
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'is_changed': self.watcher.is_changed}).encode())
+
+            self.watcher.is_changed = False
+            return
+        else:
+            super(CustomHandler, self).do_GET()
+
 
 class ThreadedServer(threading.Thread):
-    def __init__(self, port=8000, quiet=True):
+    def __init__(self, watcher, port=8000):
         self.httpd = None
         self.port = port
-        if quiet:
-            self.handler = SilentRequestHandler
-        else:
-            self.handler = SimpleHTTPRequestHandler
+        CustomHandler.watcher = watcher
+        self.handler = CustomHandler
+
         while self.httpd is None:
             try:
                 self.httpd = HTTPServer(('localhost', self.port), self.handler)
@@ -525,6 +546,7 @@ class ThreadedServer(threading.Thread):
         log("Server running.\n" \
             f"Open this address (http://localhost:{self.port}) in a web browser to see your grid")
         self.httpd.serve_forever()
+        self.handler
         log("Server terminated")
 
     def stop_server(self):
@@ -532,7 +554,7 @@ class ThreadedServer(threading.Thread):
         self.httpd.socket.close()
 
 
-def compile_mmd(filename, out_filename="index.html", autorefresh=False):
+def compile_mmd(filename, out_filename="index.html", live_server_addr=None):
     # open mmd script
     with open(filename, "r", encoding='utf-8') as f:
         mmd = f.readlines()
@@ -543,23 +565,27 @@ def compile_mmd(filename, out_filename="index.html", autorefresh=False):
 
     # write html
     with open(out_filename, 'w', encoding='utf-8') as f:
-        f.write(g.to_html(autorefresh=autorefresh))
+        f.write(g.to_html(live_server_addr=live_server_addr))
 
 
 class Watcher(threading.Thread):
     # check if a file has changed and recompile it
     def __init__(self, filename):
+        self.is_changed = False
         self.filename = filename
         self.stop = False
+        self.live_server_addr = None
         super(Watcher, self).__init__()
 
-    def run(self):
-        compile_mmd(self.filename, autorefresh=True)
+    def run(self, live_server_addr=None):
+        compile_mmd(self.filename, live_server_addr=self.live_server_addr)
         mtime = os.stat(self.filename).st_mtime
         while True:
             if self.stop: break
             if os.stat(self.filename).st_mtime != mtime:
                 mtime = os.stat(self.filename).st_mtime
-                compile_mmd(self.filename, autorefresh=True)
+                compile_mmd(self.filename, live_server_addr=self.live_server_addr)
+                self.is_changed = True
+                print("changed", self.is_changed)
             sleep(0.1)
 
