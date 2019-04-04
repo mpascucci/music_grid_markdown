@@ -1,3 +1,4 @@
 *.ipynb
 .idea
 *.egg*
+__pycache__

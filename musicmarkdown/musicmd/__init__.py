@@ -10,7 +10,12 @@ logger = logging.getLogger(__name__)
 log = logger.warning
 
 class Grid:
-    # The markdown document object
+    """
+    The markdown document object.
+    It is the root of the abstrac syntax tree for the music grid.
+
+    Its to_html() method allows to compile the tree in HTML format.
+    """
     def __init__(self):
         self.tree = []
         self.gridRows = []
@@ -73,7 +78,7 @@ class Grid:
 
         return '\n'.join(out_html)
 
-    def __str__(self):
+    def __repr__(self):
         d = str(self.info)
         d += '\n\n'
         d += ">>>CONTENT\n"
@@ -85,6 +90,9 @@ class Grid:
 
 
 class Element:
+    """
+    An leaf of the abstract syntax tree.
+    """
     tag_start = ""
     rep_tag = 'Element'
     html_text = ''
@@ -105,6 +113,9 @@ class Element:
 
 
 class ElementGroup:
+    """
+    An node of the abstract syntax tree that can have children elements.
+    """
     tag_start = ''
     rep_tag = "ElementGroup"
 
@@ -259,8 +270,91 @@ class GridRow(ElementGroup):
     tag_start = '<div class="grid-row">'
     rep_tag = "Row"
 
+    def __init__(self):
+        super(GridRow, self).__init__()
+
+class Vspace(Element):
+    def __init__(self, kind=''):
+        if kind:
+            self.tag_start = f'<div class="vspace-{kind}">'
+        else:
+            self.tag_start = f'<div class="vspace">'
+        self.html_text = ''
+
+
+class SectionName(Element):
+    tag_start = '<p class="name">'
+    rep_tag = "Name"
+
+    def __init__(self, name):
+        self.html_text = name
+
+
+class SectionRepetitions(Element):
+    tag_start = '<p class="repeats">'
+    rep_tag = "Rep"
+
+    def __init__(self, num):
+        self.html_text = "x" + str(num)
+
+
+class Rarrow(Element):
+    tag_start = '<p class="debug arrow">'
+    rep_tag = "->"
+
+    def __init__(self):
+        self.html_text = "&rarr;" # "&#8680;"
+
+
+class SectionComment(Element):
+    tag_start = '<span class="note">'
+    rep_tag = "Comment"
+
+    def __init__(self, text):
+        self.html_text = text
+
+
+class NotRecognized(Element):
+    tag_start = '<span class="error">'
+    rep_tag = "Error"
+
+    def __init__(self, text):
+        self.html_text = f'SyntaxError: "{text}"'
+
+
+class Section(ElementGroup):
+    rep_tag = "Section"
+    tag_start = '<section class="tune-section">'
+
+
+class BarlineSimple(Element):
+    tag_start = '<section class="tune-section">'
+
+
+class GridProcessor:
+    """
+    The Music Grid Markdown parser.
+
+    Parse a music grid markdown script and return a Grid object
+    """
+    re = {
+        "title": re.compile(r"^#([^#]+)$"),
+        "subtitle": re.compile(r"^#{2}([^#]+)$"),
+        "author": re.compile(r"^(?i:author:)(.+)$"),
+        "copyright": re.compile(r"^(?i:copyright:)(.+)$"),
+        "vspace": re.compile(r"^%vspace-?(.*)%$"),
+        "tag": re.compile(r"^(<.*>)$"),
+        "comment": re.compile(r"^(.*)(?=(//))(.*)$"),
+        "sections-line": re.compile(r"^\s*-(.*)$"),
+        "grid-row": re.compile(r"^(?:(?P<num>\d)/(?P<den>\d))?\s*([|\[\]].*[|\[\]])$"),
+        "section": {
+            "name": re.compile(r"\[(?P<name>.*?)\](?:\s*x(?P<rep>\d+))?"),
+            "rarrow": re.compile(r"->"),
+        }
+    }
+
     @staticmethod
-    def parse_bars(text):
+    def parse_row(text):
         measures = re.findall(r"(?:\d/\d\s+)?[|\[\]][^|\[\]]*", text)
         measures[-2] += measures[-1]
         measures.pop(-1)
@@ -328,88 +422,6 @@ class GridRow(ElementGroup):
             out.append(bb)
         return out
 
-    def __init__(self, bars, tempo=None):
-        super(GridRow, self).__init__()
-        self.tempo = tempo
-        self.bars = bars
-        self.children = self.parse_bars(bars)
-
-
-class Vspace(Element):
-    def __init__(self, kind=''):
-        if kind:
-            self.tag_start = f'<div class="vspace-{kind}">'
-        else:
-            self.tag_start = f'<div class="vspace">'
-        self.html_text = ''
-
-
-class SectionName(Element):
-    tag_start = '<p class="name">'
-    rep_tag = "Name"
-
-    def __init__(self, name):
-        self.html_text = name
-
-
-class SectionRepetitions(Element):
-    tag_start = '<p class="repeats">'
-    rep_tag = "Rep"
-
-    def __init__(self, num):
-        self.html_text = "x" + str(num)
-
-
-class Rarrow(Element):
-    tag_start = '<p class="debug arrow">'
-    rep_tag = "->"
-
-    def __init__(self):
-        self.html_text = "&rarr;" # "&#8680;"
-
-
-class SectionComment(Element):
-    tag_start = '<span class="note">'
-    rep_tag = "Comment"
-
-    def __init__(self, text):
-        self.html_text = text
-
-
-class NotRecognized(Element):
-    tag_start = '<span class="error">'
-    rep_tag = "Error"
-
-    def __init__(self, text):
-        self.html_text = f'SyntaxError: "{text}"'
-
-
-class Section(ElementGroup):
-    rep_tag = "Section"
-    tag_start = '<section class="tune-section">'
-
-
-class BarlineSimple(Element):
-    tag_start = '<section class="tune-section">'
-
-
-class GridProcessor:
-    re = {
-        "title": re.compile(r"^#([^#]+)$"),
-        "subtitle": re.compile(r"^#{2}([^#]+)$"),
-        "author": re.compile(r"^(?i:author:)(.+)$"),
-        "copyright": re.compile(r"^(?i:copyright:)(.+)$"),
-        "vspace": re.compile(r"^%vspace-?(.*)%$"),
-        "tag": re.compile(r"^(<.*>)$"),
-        "comment": re.compile(r"^(.*)(?=(//))(.*)$"),
-        "sections-line": re.compile(r"^\s*-(.*)$"),
-        "grid-row": re.compile(r"^(?:(?P<num>\d)/(?P<den>\d))?\s*([|\[\]].*[|\[\]])$"),
-        "section": {
-            "name": re.compile(r"\[(?P<name>.*?)\](?:\s*x(?P<rep>\d+))?"),
-            "rarrow": re.compile(r"->"),
-        }
-    }
-
     def parse_section(self, text):
         section = Section()
         atoms = re.split('\s+', text)
@@ -474,7 +486,8 @@ class GridProcessor:
                 text = m_sectn.group(1).strip()
                 g.tree.append(self.parse_section(text))
             elif m_grrow:
-                gridRow = GridRow(m_grrow.group(0))
+                gridRow = GridRow()
+                gridRow.children = self.parse_row(m_grrow.group(0))
                 g.tree.append(gridRow)
             elif m_tag:
                 e = Element()
