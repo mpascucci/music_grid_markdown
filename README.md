@@ -102,4 +102,4 @@ A bar may contain:
 * `-4-` a pause
 * `-` an empty space
 * any other text will be interpreted as chord
-* evry object in a bar must be separated by `witespace`
+* evry object in a bar must be separated by `whitespace`
