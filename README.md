@@ -57,11 +57,13 @@ MusicMarkdown is an executable python module.
 	
 		python -m musicmd script.txt serve
 	
-	It will start a built-in web server and give you a link to open in a web browser. This will display the preview of the grid and show live modifications as you change (and save) your script.
+	It will start a built-in web server and give you a link to open in a web browser. This will display the preview of the grid and show live modifications as you change (and save) your script. This option needs javascript enabled in your browser (which is usually the case, unless you disabled it on purpose)
 	
-	Another option is to use an external preview, for example [Atom](https://atom.io)'s "Preview HTML" extension. This allows to have the script and the preview in the same editor. In this case run the same command and then open both your script and the generated html file and start a preview.
+	Another option is to use an external preview, for example [Atom](https://atom.io)'s "Preview HTML" extension. This allows to have the script and the preview in the same editor. In this case run this command in a terminal:
 
-		python -m musicmd script.txt serve
+		python -m musicmd script.txt watch
+
+	and then open both your script and the generated html file and start a preview.
 
 ## Music grid markdown syntax
 
