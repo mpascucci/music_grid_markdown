@@ -6,6 +6,7 @@ The output are well formatted music grids, that you can view or print. Here is a
 
 The input is a text file written in a special *markdown* syntax called "music grid markdown". Here is the script that produced the grid above:
 
+```markdown
 # The Tune title
 ## A super cool subtitle
 Author: The Author // the composer's name
