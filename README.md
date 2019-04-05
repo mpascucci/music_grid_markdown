@@ -8,6 +8,7 @@ The input is a text file written in a special *markdown* syntax called "music gr
 
 ```pythonc{cmd=true}
 import musicmarkdown
+print(musicmarkdown)
 ```
 # The Tune title
 ## A super cool subtitle
