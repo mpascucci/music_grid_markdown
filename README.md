@@ -49,7 +49,7 @@ MusicMarkdown is an executable python module.
 
 		python -m musicmd script.txt
 
-	this will generate an html file that you can open with your web browser.
+	this will generate an html file that you can open with your web browser. Then you can print it or save it as PDF etc.
 	
 	If you want to open a live preview that changes as you edit the script, you have two options:
 	
