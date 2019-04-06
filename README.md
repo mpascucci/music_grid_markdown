@@ -37,9 +37,9 @@ MusicMarkdown is an executable python module.
 
 1. Download and install [Python3](https://www.python.org/downloads/) (if it is not installed already in your system)
 
-2. Clone the project or download [release/musicmarkdown.zip](musicmarkdown.zip) and unzip it somewhere
+2. Clone the project or download the file [release/musicmarkdown.zip](release/musicmarkdown.zip) and unzip it somewhere
 
-3. Open a terminal window and go to the containing directory (probably the Download folder).
+3. Open a terminal window and go to the directory that contains `musicmarkdown`.
 
 4. Install the module by running this command in a terminal window: `pip install musicmarkdown`
 
