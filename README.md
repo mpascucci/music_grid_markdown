@@ -41,13 +41,13 @@ MusicMarkdown is an executable python module.
 
 3. Open a terminal window and go to the directory that contains `musicmarkdown`.
 
-4. Install the module by running this command in a terminal window: `pip install musicmarkdown`
+4. Install the module by running this command in a terminal window: `pip3 install musicmarkdown`
 
 5. Create your music markdown script (or download [the example one](script.txt)).
 
 6. In the terminal run this command:
 
-		python -m musicmd script.txt
+		python3 -m musicmd script.txt
 
 	this will generate an html file that you can open with your web browser. Then you can print it or save it as PDF etc.
 	
@@ -55,7 +55,7 @@ MusicMarkdown is an executable python module.
 	
 	Maybe the easiest is to run this command in a terminal:
 	
-		python -m musicmd script.txt serve
+		python3 -m musicmd script.txt serve
 	
 	It will start a built-in web server and give you a link to open in a web browser. This will display the preview of the grid and show live modifications as you change (and save) your script. This option needs javascript enabled in your browser (which is usually the case, unless you disabled it on purpose)
 	
