@@ -94,13 +94,14 @@ Bars start with one of
 
 * modifiers `.l` (long) and `.s` (short) can be added in a bar to try to modify its size (works better for pauses and pentagrams).
 
+Bars may contain a *case* text in brackets. values `1.` and `2.` are special and generate repetition cases.
+
 ### vertical space
 Extra vertical space can be added with one of these:
 * `%vspace%`
 * `%vspace-big%`
 * `%vspace-small%`
 
-They may contain a *case* text in brackets. values `1.` and `2.` are special and generate repetition cases.
 
 A bar may contain:
 * `===` a pentagram
