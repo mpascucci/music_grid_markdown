@@ -2,3 +2,5 @@
 .idea
 *.egg*
 __pycache__
+build
+dist
