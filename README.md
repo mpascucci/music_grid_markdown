@@ -41,7 +41,7 @@ MusicMarkdown is an executable python module.
 
 3. Open a terminal window and go to the directory that contains `musicmarkdown`.
 
-4. Install the module by running this command in a terminal window: `pip3 install musicmarkdown`
+4. Install the module by running this command in a terminal window: `pip3 install ./musicmarkdown`
 
 5. Create your music markdown script (or download [the example one](script.txt)).
 
