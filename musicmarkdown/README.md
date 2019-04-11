@@ -1,109 +1,31 @@
 # Music Grid Markdown
 Write formatted music grids (chords and structures), with live preview.
 
-The output are well formatted music grids, that you can view or print. Here is an example:
-![](agrid.jpg)
+The output are well formatted music grids, that you can view or print.
+The input is a text file written in a special markdown syntax.
 
-The input is a text file written in a special *markdown* syntax called "music grid markdown". Here is the script that produced the grid above:
+For more info wiew the project description on GitHub:
+https://github.com/mpascucci/music_grid_markdown
 
+
+Here is an example script:
 ```
 # The Tune title
-## A super cool subtitle
+## version 1
 Author: The Author // the composer's name
-Copyright: Relevant Copyright
+Copyright: The Big Big Band
 
-// this is a line comment
+- [INTRO]x2 Drums play 8 bars
 
-- [INTRO]x2 "Drums play 8 bars".
+- [A]x2 Play softly
 
-- [A]x2 Play in a certain way.
-
-4/4 [: (Tacet first) Dm | (1.) Dm  A7 :](2.) Dm D7 |
+4/4 [: Dm | Dm  A7 :]
 | G | % | % | A7 Dm |
 
-%vspace%
+- [B] duble tempo
 
-- [B]x2 Play in a certain way.
-
-| Gm | (Break!) Dm - - - | === |
-| (solo trumpet) -7- .l | A7 Dm |
+| Gm | D7 | Gm | D7 |
+| Gm | Gm | Gm | D7 |
 
 - [A]x2 -> [B]x2 -> [CODA]
 ```
-
-## Install and use
-
-MusicMarkdown is an executable python module.
-
-1. Download and install [Python3](https://www.python.org/downloads/) (if it is not installed already in your system)
-
-2. Install the module with this command in a terminal window
-
-		pip3 install musicmarkdown
-
-3. Create your music markdown script (or download [the example one](script.txt)).
-
-4. Use a terminal window to goto the folder that contains your script and run this command:
-
-		python3 -m musicmd script.txt
-
-This will generate an html file that you can open with your web browser. Then you can print it or save it as PDF etc.
-
-If you want to open a **live preview** that changes as you edit the script, you have two options:
-
-Maybe the easiest is to run this command in a terminal:
-
-	python3 -m musicmd script.txt serve
-
-It will start a built-in web server and give you a link to open in a web browser. This will display the preview of the grid and show live modifications as you change (and save) your script. This option needs javascript enabled in your browser (which is usually the case, unless you disabled it on purpose)
-
-Another option is to use an external preview, for example [Atom](https://atom.io)'s "Preview HTML" extension. This allows to have the script and the preview in the same editor. In this case run this command in a terminal:
-
-	python -m musicmd script.txt watch
-
-and then open both your script and the generated html file and start a preview.
-
-## Music grid markdown syntax
-
-### Title
-Title and subtitle are specified with leading `#` as in standard markdown syntax.
-* `Author:` and  `Copyright:` specify the corresponding field.
-
-The title section is not compulsory.
-
-
-### Comments
-Comments start with `\\`
-### Sections
-sections are specified with a `-` at the beginning of the line.
-Sections may contain:
-* section names `[NAME]`
-* repetitions `[NAME]x2`
-* right arrows `->`
-* normal text
-
-### bars
-Bars start with one of
-* `|` normal
-* `[` double open
-* `]`double close
-* A bar can be preceded by a tempo sign e.g. `3/4`
-* A bar can be preceeded or followed by a repetition sign `:`
-
-* modifiers `.l` (long) and `.s` (short) can be added in a bar to try to modify its size (works better for pauses and pentagrams).
-
-Bars may contain a *case* text in brackets. values `1.` and `2.` are special and generate repetition cases.
-
-### vertical space
-Extra vertical space can be added with one of these:
-* `%vspace%`
-* `%vspace-big%`
-* `%vspace-small%`
-
-
-A bar may contain:
-* `===` a pentagram
-* `-4-` a pause
-* `-` an empty space
-* any other text will be interpreted as chord
-* evry object in a bar must be separated by `whitespace`
