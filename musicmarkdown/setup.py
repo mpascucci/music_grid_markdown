@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='musicmarkdown',
-    version='0.3.1',
+    version='0.3.2',
     description='Makrdown compiler for music grids and structures',
     long_description=long_description,
     author='Marco Pascucci',

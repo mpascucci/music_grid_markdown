@@ -18,7 +18,7 @@ Copyright: Relevant Copyright
 
 - [A]x2 Play in a certain way.
 
-4/4 [: (Tacet first) Dm | (1.) Dm  A7 :](2.) Dm D7 |
+4/4 [: {Tacet first} Dm | (1.) Dm  A7 :]{2.} Dm D7 |
 | G | % | % | A7 Dm |
 
 %vspace%
@@ -26,7 +26,7 @@ Copyright: Relevant Copyright
 - [B]x2 Play in a certain way.
 
 | Gm | (Break!) Dm - - - | === |
-| (solo trumpet) -7- .l | A7 Dm |
+| {solo trumpet} -7- .l | A7 Dm |
 
 - [A]x2 -> [B]x2 -> [CODA]
 ```
@@ -92,7 +92,7 @@ Bars start with one of
 
 * modifiers `.l` (long) and `.s` (short) can be added in a bar to try to modify its size (works better for pauses and pentagrams).
 
-Bars may contain a *case* text in brackets. values `1.` and `2.` are special and generate repetition cases.
+Bars may contain a *case* text in curl brackets `{}`. values `1.` and `2.` are special and generate repetition cases.
 
 ### vertical space
 Extra vertical space can be added with one of these:

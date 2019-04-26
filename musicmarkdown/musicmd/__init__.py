@@ -367,7 +367,7 @@ class GridProcessor:
         measures.pop(-1)
         out = []
         for measure in measures:
-            re_case = re.compile(r'(\(.*?\))')  # split case test in brackets, where spaces should be keept
+            re_case = re.compile(r'({.*?})')  # split case test in brackets, where spaces should be keept
             temp = re.split(re_case, measure)
             tokens = []
             bb = BarBlock()
