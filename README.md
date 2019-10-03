@@ -18,7 +18,7 @@ Copyright: Relevant Copyright
 
 - [A]x2 Play in a certain way.
 
-4/4 [: {Tacet first} Dm | (1.) Dm  A7 :]{2.} Dm D7 |
+4/4 [: {Tacet first} Dm | {1.} Dm  A7 :]{2.} Dm D7 |
 | G | % | % | A7 Dm |
 
 %vspace%
